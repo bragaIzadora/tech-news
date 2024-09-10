@@ -29,5 +29,10 @@ def search_by_date(date):
 
 # Requisito 9
 def search_by_category(category):
-    """Seu código deve vir aqui"""
-    raise NotImplementedError
+    normalized_category = category.lower()
+
+    results = db.news.find(
+        {"category": {"$regex": f"^{normalized_category}$", "$options": "i"}},
+        {"title": 1, "url": 1})
+
+    return [(result["title"], result["url"]) for result in results]
